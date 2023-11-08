@@ -6,7 +6,10 @@ module.exports.Signup = async (req, res, next) => {
 	try {
 		const { email, password, confirm_password, username, createdAt } = req.body;
 		if (!email || !password || !confirm_password || !username) {
-			return res.json({ message: "すべてのフィールドは必須です。" });
+			return res.json({ message: "すべての項目は必須です。" });
+		}
+		if (!email.includes("@")) {
+			return res.json({ message: "電子メールには@を含める必要があります。" });
 		}
 		const existingEmail = await User.findOne({ email });
 		if (existingEmail) {
@@ -19,9 +22,7 @@ module.exports.Signup = async (req, res, next) => {
 		if (password != confirm_password) {
 			return res.json({ message: "確認パスワードを正確に入力してください。" });
 		}
-		if (!email.includes("@")) {
-			return res.json({ message: "電子メールには@を含める必要があります。" });
-		}
+
 		const user = await User.create({ email, password, username, createdAt });
 		const token = createSecretToken(user._id);
 		res.cookie("token", token, {
@@ -41,7 +42,10 @@ module.exports.Login = async (req, res, next) => {
 	try {
 		const { email, password } = req.body;
 		if (!email || !password) {
-			return res.json({ message: "すべてのフィールドは必須です。" });
+			return res.json({ message: "すべての項目は必須です。" });
+		}
+		if (!email.includes("@")) {
+			return res.json({ message: "電子メールには@を含める必要があります。" });
 		}
 		const user = await User.findOne({ email });
 		if (!user) {
