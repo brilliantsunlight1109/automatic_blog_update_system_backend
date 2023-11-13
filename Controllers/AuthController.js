@@ -22,8 +22,14 @@ module.exports.Signup = async (req, res, next) => {
 		if (password != confirm_password) {
 			return res.json({ message: "確認パスワードを正確に入力してください。" });
 		}
-
-		const user = await User.create({ email, password, username, createdAt });
+		const permission = "not";
+		const user = await User.create({
+			email,
+			password,
+			username,
+			permission,
+			createdAt,
+		});
 		const token = createSecretToken(user._id);
 		res.cookie("token", token, {
 			withCredentials: true,
@@ -55,14 +61,24 @@ module.exports.Login = async (req, res, next) => {
 		if (!auth) {
 			return res.json({ message: "パスワードを正確に入力してください。" });
 		}
-		const token = createSecretToken(user._id);
-		res.cookie("token", token, {
-			withCredentials: true,
-			httpOnly: false,
-		});
-		res
-			.status(200)
-			.json({ message: "正確にログインしています。", success: true });
+		if (user.permission === "not") {
+			return res.json({
+				message: "あなたは権限がありません。",
+			});
+		} else if (user.permission === "user" || user.permission === "manager") {
+			const token = createSecretToken(user._id);
+			res.cookie("token", token, {
+				withCredentials: true,
+				httpOnly: false,
+			});
+			res
+				.status(200)
+				.json({ message: "正確にログインしています。", success: true });
+		} else {
+			return res.json({
+				message: "管理部にお問い合わせください。",
+			});
+		}
 		next();
 	} catch (error) {
 		console.error(error);
