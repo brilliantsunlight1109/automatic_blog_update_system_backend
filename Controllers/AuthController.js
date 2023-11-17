@@ -4,8 +4,27 @@ const { createSecretToken } = require("../util/SecretToken");
 
 module.exports.Signup = async (req, res, next) => {
 	try {
-		const { email, password, confirm_password, username, createdAt } = req.body;
-		if (!email || !password || !confirm_password || !username) {
+		const {
+			email,
+			password,
+			confirm_password,
+			username,
+			id,
+			salon_id,
+			salon_password,
+			salon_confirm_password,
+			createdAt,
+		} = req.body;
+		if (
+			!email ||
+			!password ||
+			!confirm_password ||
+			!username ||
+			!id ||
+			!salon_id ||
+			!salon_password ||
+			!salon_confirm_password
+		) {
 			return res.json({ message: "すべての項目は必須です。" });
 		}
 		if (!email.includes("@")) {
@@ -19,14 +38,30 @@ module.exports.Signup = async (req, res, next) => {
 		if (existingUsername) {
 			return res.json({ message: "ユーザー名は既に存在します。" });
 		}
+		const existingId = await User.findOne({ id });
+		if (existingId) {
+			return res.json({ message: "IDはすでに存在します。" });
+		}
+		const existingSalon_id = await User.findOne({ salon_id });
+		if (existingSalon_id) {
+			return res.json({ message: "Salon Board IDはすでに存在します。" });
+		}
 		if (password != confirm_password) {
 			return res.json({ message: "確認パスワードを正確に入力してください。" });
+		}
+		if (salon_password != salon_confirm_password) {
+			return res.json({
+				message: "Salon Board 確認パスワードを正確に入力してください。",
+			});
 		}
 		const permission = "not";
 		const user = await User.create({
 			email,
 			password,
 			username,
+			id,
+			salon_id,
+			salon_password,
 			permission,
 			createdAt,
 		});

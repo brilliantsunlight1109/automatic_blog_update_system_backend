@@ -15,6 +15,18 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: [true, "Your password is required"],
 	},
+	id: {
+		type: String,
+		required: [true, "Your ID is required"],
+	},
+	salon_id: {
+		type: String,
+		required: [true, "Your Salon ID is required"],
+	},
+	salon_password: {
+		type: String,
+		required: [true, "Your ID is required"],
+	},
 	permission: {
 		type: String,
 		required: [true, "Your permission is required"],
@@ -27,17 +39,9 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre("save", async function (next) {
 	this.password = await bcrypt.hash(this.password, 12);
+	this.salon_password = await bcrypt.hash(this.salon_password, 12);
 	next();
 });
 
-// userSchema.statics.login = async function(email,password){
-//     const user = await this.findOne({email})
-//     if(user){
-//         const auth = await bcrypt.compare(password,user.password)
-//         if(auth) return user;
-//         throw Error('Invalid password')
-//     }
-//     throw Error('Invalid email')
-// }
 
 module.exports = mongoose.model("User", userSchema);

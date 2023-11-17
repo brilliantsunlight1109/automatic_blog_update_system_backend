@@ -2,14 +2,13 @@ const Style = require("../Models/Style");
 
 module.exports.getAllStyle = (req, res) => {
 	Style.find()
-		.then((Style) => res.json(Style))
+		.then((data) => res.json(data))
 		.catch((err) =>
 			res.status(404).json({ message: "Style not find", error: err.message })
 		);
 };
 
 module.exports.postCreateStyle = (req, res) => {
-	console.log(req.body);
 	Style.create(req.body)
 		.then((data) => res.json({ message: "Style added successfully", data }))
 		.catch((err) =>
