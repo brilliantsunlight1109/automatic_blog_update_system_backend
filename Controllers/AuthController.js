@@ -9,7 +9,7 @@ module.exports.Signup = async (req, res, next) => {
 			password,
 			confirm_password,
 			username,
-			id,
+			style_tokyo_id,
 			salon_id,
 			salon_password,
 			salon_confirm_password,
@@ -20,7 +20,7 @@ module.exports.Signup = async (req, res, next) => {
 			!password ||
 			!confirm_password ||
 			!username ||
-			!id ||
+			!style_tokyo_id ||
 			!salon_id ||
 			!salon_password ||
 			!salon_confirm_password
@@ -38,8 +38,8 @@ module.exports.Signup = async (req, res, next) => {
 		if (existingUsername) {
 			return res.json({ message: "ユーザー名は既に存在します。" });
 		}
-		const existingId = await User.findOne({ id });
-		if (existingId) {
+		const existingStyleTokyoId = await User.findOne({ style_tokyo_id });
+		if (existingStyleTokyoId) {
 			return res.json({ message: "IDはすでに存在します。" });
 		}
 		const existingSalon_id = await User.findOne({ salon_id });
@@ -59,7 +59,7 @@ module.exports.Signup = async (req, res, next) => {
 			email,
 			password,
 			username,
-			id,
+			style_tokyo_id,
 			salon_id,
 			salon_password,
 			permission,

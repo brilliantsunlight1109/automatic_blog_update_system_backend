@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: [true, "Your password is required"],
 	},
-	id: {
+	style_tokyo_id: {
 		type: String,
 		required: [true, "Your ID is required"],
 	},
@@ -42,6 +42,5 @@ userSchema.pre("save", async function (next) {
 	this.salon_password = await bcrypt.hash(this.salon_password, 12);
 	next();
 });
-
 
 module.exports = mongoose.model("User", userSchema);

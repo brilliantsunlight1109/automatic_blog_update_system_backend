@@ -11,16 +11,18 @@ module.exports.getAllBlog = (req, res) => {
 module.exports.getIdBlog = (req, res) => {
 	const id = req.params.id;
 	Blog.findById(id)
-	.then((data)=>{
-		if(!data) {
-			return res.status(404).json({message: "Blog not found"});
-		}
-		res.json(data);
-	})
-	.catch((err) => {
-		res.status(500).json({message: "Error fetching Blog", error: err.message})
-	})
-}
+		.then((data) => {
+			if (!data) {
+				return res.status(404).json({ message: "Blog not found" });
+			}
+			res.json(data);
+		})
+		.catch((err) => {
+			res
+				.status(500)
+				.json({ message: "Error fetching Blog", error: err.message });
+		});
+};
 
 module.exports.postCreateBlog = (req, res) => {
 	Blog.create(req.body)
@@ -31,7 +33,6 @@ module.exports.postCreateBlog = (req, res) => {
 				.json({ message: "Failed to add Blog", error: err.message })
 		);
 };
-
 
 module.exports.putUpdateBlog = (req, res) => {
 	Blog.findByIdAndUpdate(req.params.id, req.body)
