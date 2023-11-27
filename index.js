@@ -27,6 +27,7 @@ app.use(cookieParser());
 app.use(express.json({ limit: "50mb" }));
 
 app.use("/", authRoute);
+app.use("/images", express.static("images"));
 
 app.use("/api/style", Style);
 

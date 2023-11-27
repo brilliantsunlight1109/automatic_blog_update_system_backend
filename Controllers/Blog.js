@@ -25,7 +25,28 @@ module.exports.getIdBlog = (req, res) => {
 };
 
 module.exports.postCreateBlog = (req, res) => {
-	Blog.create(req.body)
+	const url = req.protocol + "://" + req.get("host");
+	const {
+		post_date,
+		contributor,
+		category,
+		title_character,
+		coupon,
+		signature,
+		post_text,
+	} = req.body;
+	const uploadImage = url + "/images/" + req.file.filename;
+	const newBlogData = {
+		post_date,
+		contributor,
+		category,
+		title_character,
+		coupon,
+		signature,
+		uploadImage,
+		post_text,
+	};
+	Blog.create(newBlogData)
 		.then((data) => res.json({ message: "Blog added successfully", data }))
 		.catch((err) =>
 			res
@@ -35,7 +56,28 @@ module.exports.postCreateBlog = (req, res) => {
 };
 
 module.exports.putUpdateBlog = (req, res) => {
-	Blog.findByIdAndUpdate(req.params.id, req.body)
+	const url = req.protocol + "://" + req.get("host");
+	const {
+		post_date,
+		contributor,
+		category,
+		title_character,
+		coupon,
+		signature,
+		post_text,
+	} = req.body;
+	const uploadImage = url + "/images/" + req.file.filename;
+	const newBlogData = {
+		post_date,
+		contributor,
+		category,
+		title_character,
+		coupon,
+		signature,
+		uploadImage,
+		post_text,
+	};
+	Blog.findByIdAndUpdate(req.params.id, newBlogData)
 		.then((data) => res.json({ message: "updated successfully", data }))
 		.catch((err) =>
 			res
