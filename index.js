@@ -32,3 +32,5 @@ app.use("/images", express.static("images"));
 app.use("/api/style", Style);
 
 app.use("/api/blog", Blog);
+
+
